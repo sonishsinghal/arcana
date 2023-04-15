@@ -1,3 +1,6 @@
 Flask==2.2.2
 Flask_Cors==3.0.10
 gunicorn==20.1.0
+cvxpy
+riskfolio-lib
+yfinance
