@@ -7,29 +7,50 @@ import { Box } from '@mui/material';
 import { TextField } from '@mui/material';
 import { MenuItem } from '@mui/material';
 import { Typography } from '@mui/material';
+import FormControl from '@mui/material/FormControl';
+import { FormLabel } from '@mui/material';
+import { useState } from 'react';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs, { Dayjs } from 'dayjs';
+import { Button } from '@mui/material';
+
+
+
 
 const inter = Inter({ subsets: ['latin'] });
 
 const field = [
   {
-    value: 'USD',
-    label: '$',
+    value: '1',
+    label: 'Mean Risk Portfolio Optimization using historical estimates.',
   },
   {
-    value: 'EUR',
-    label: '€',
+    value: '2',
+    label: 'Mean Risk Portfolio Optimization using historical estimates.',
   },
   {
-    value: 'BTC',
-    label: '฿',
+    value: '3',
+    label: 'Mean Risk Portfolio Optimization using historical estimates.',
   },
   {
-    value: 'JPY',
-    label: '¥',
+    value: '4',
+    label: 'Mean Risk Portfolio Optimization using historical estimates.',
   },
 ];
 
 export default function Optimizer() {
+  const [startDate, setStartDate] = useState<Dayjs | null>(dayjs('2022-04-17'));
+  const [endDate, setEndDate] = useState<Dayjs | null>(dayjs('2022-04-17'));
+  const [goal, setGoal] = useState<string>('1');
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    console.log('submit');
+  };
+
   return (
     <>
       <Head>
@@ -43,29 +64,57 @@ export default function Optimizer() {
           <Appbar />
           <Box
             component="form"
-            sx={{
-              '& .MuiTextField-root': { m: 1 },
-            }}
+            // sx={{
+            //   '& .MuiTextField-root': { m: 1 },
+            // }}
             noValidate
             autoComplete="off"
           >
-            <div style={{}}>
-              <Typography variant="h6">Optimizer</Typography>
-              <TextField
-                id="filled-select-currency"
-                select
-                label="Select"
-                defaultValue="EUR"
-                helperText="Please select your currency"
-                variant="filled"
-              >
-                {field.map((option) => (
-                  <MenuItem key={option.value} value={option.value}>
-                    {option.label}
-                  </MenuItem>
-                ))}
-              </TextField>
-            </div>
+            <FormControl
+              onSubmit={(e) => {
+                handleSubmit(e);
+              }}
+              fullWidth
+            >
+              <Box sx={{ m: 1, p: 1 }}>
+                <Typography sx={{ mt: 1 }}>Start Date</Typography>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker
+                    onChange={(newValue) => setStartDate(newValue)}
+                    value={startDate}
+                  />
+                </LocalizationProvider>
+              </Box>
+              <Box sx={{ m: 1, p: 1 }}>
+                <Typography sx={{ mt: 1 }}>End Date </Typography>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DatePicker
+                    onChange={(newValue) => setEndDate(newValue)}
+                    value={endDate}
+                  />
+                </LocalizationProvider>
+              </Box>
+              <Box sx={{ m: 1, p: 1 }}>
+                <Typography sx={{ mt: 1 }}>Optimization Goal</Typography>
+                <TextField
+                  select
+                  defaultValue="1"
+                  variant="filled"
+                  sx={{ width: '100%' }}
+                >
+                  {field.map((option) => (
+                    <MenuItem key={option.value} value={option.value}>
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </TextField>
+              </Box>
+              <Box sx={{ m: 1, p: 1 }}>
+                <Button type={'submit'} variant="contained">
+                  Submit
+                </Button>
+              </Box>
+            </FormControl>
           </Box>
         </div>
       </main>
