@@ -3,7 +3,7 @@ from flask_cors import CORS, cross_origin
 import base64
 import json
 import os
-
+from onestock import plot_generator
 
 app = Flask(__name__)
 CORS(app)
@@ -18,6 +18,9 @@ def hello_world():
 @app.route('/image', methods=['POST'])
 @cross_origin()
 def getImage():
+    data = json.loads(request.data)
+    print(data["company"])
+    plot_generator(data["start"],data["end"],data["company"])
     with open("./images/image.png", "rb") as img_file:
         b64_string = base64.b64encode(img_file.read())
     data = jsonify(plot1=str(b64_string, 'UTF-8'),
