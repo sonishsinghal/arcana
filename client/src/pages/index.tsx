@@ -312,43 +312,72 @@ export default function Home() {
                 }}
               >
                 {Plot1 && (
-                  <Box sx={{ m: 1 }}>
+                  <Box sx={{ mt: 1 }}>
                     <Image src={Plot1} alt="plot" width={800} height={500} />
                   </Box>
                 )}
                 {Plot2 && (
-                  <Box sx={{ m: 1 }}>
+                  <Box sx={{ mt: 1 }}>
                     <Image src={Plot2} alt="plot" width={800} height={500} />
+                    <Typography sx={{ textAlign: 'center' }}>
+                      The plots are the fluctuation in Open, close, high and low
+                      prices.
+                    </Typography>
                   </Box>
                 )}
+
+                {Plot5 && (
+                  <Box sx={{ mt: 1 }}>
+                    <Image src={Plot5} alt="plot" width={800} height={500} />
+                    <Typography sx={{ textAlign: 'center' }}>
+                      The RSI plots were generated for the given closing prices
+                      and threshold of 70 and 30 are used.
+                    </Typography>
+                  </Box>
+                )}
+                {Plot6 && (
+                  <Box sx={{ mt: 1 }}>
+                    <Image src={Plot6} alt="plot" width={800} height={500} />
+                    <Typography sx={{ textAlign: 'center' }}>
+                      {' '}
+                      50 day and 20 day Moving averages were plotted and in the
+                      intersection points buy and sell positions were indicated
+                      in the graph.
+                    </Typography>
+                  </Box>
+                )}
+                {Plot7 && (
+                  <Box sx={{ mt: 1 }}>
+                    <Image src={Plot7} alt="plot" width={800} height={500} />
+                    <Typography sx={{ textAlign: 'center' }}>
+                      Additionally, Boullinger bands were plotted for bounding
+                      the price flow.
+                    </Typography>
+                  </Box>
+                )}
+                {Plot8 && (
+                  <Box sx={{ mt: 1 }}>
+                    <Image src={Plot8} alt="plot" width={800} height={500} />
+                    <Typography sx={{ textAlign: 'center' }}>
+                      AI models were tried and trained on the previous 32 days
+                      of the data and tried to fit on the data.
+                    </Typography>
+                  </Box>
+                )}
+
                 {Plot3 && (
-                  <Box sx={{ m: 1 }}>
+                  <Box sx={{ mt: 1 }}>
                     <Image src={Plot3} alt="plot" width={800} height={500} />
+                    <Typography sx={{ textAlign: 'center' }}></Typography>
                   </Box>
                 )}
                 {Plot4 && (
                   <Box sx={{ m: 1 }}>
                     <Image src={Plot4} alt="plot" width={800} height={500} />
-                  </Box>
-                )}
-                {Plot5 && (
-                  <Box sx={{ m: 1 }}>
-                    <Image src={Plot5} alt="plot" width={800} height={500} />
-                  </Box>
-                )}
-                {Plot6 && (
-                  <Box sx={{ m: 1 }}>
-                    <Image src={Plot6} alt="plot" width={800} height={500} />
-                  </Box>
-                )}
-                {Plot7 && (
-                  <Box sx={{ m: 1 }}>
-                    <Image src={Plot7} alt="plot" width={800} height={500} />
-                  </Box>
-                )}
-                {Plot8 && (
-                  <Box sx={{ m: 1 }}>
-                    <Image src={Plot8} alt="plot" width={800} height={500} />
+                    <Typography sx={{ textAlign: 'center' }}>
+                      The above-generated plots indicate the variation in price
+                      over a given time.{' '}
+                    </Typography>
                   </Box>
                 )}
               </Box>
