@@ -34,24 +34,24 @@ const field = [
   },
   {
     value: '2',
-    label: 'Mean Risk Portfolio Optimization using historical estimates.',
+    label: 'Ulcer Index Portfolio Optimization for Mean Risk and Risk Parity.',
   },
   {
     value: '3',
-    label: 'Mean Risk Portfolio Optimization using historical estimates.',
+    label: 'Mean Risk Portfolio Optimization using Black Litterman model.',
   },
   {
     value: '4',
-    label: 'Mean Risk Portfolio Optimization using historical estimates.',
+    label: 'Portfolio Optimization with Risk Factors using Stepwise Regression',
   },
   {
     value: '5',
-    label: 'Mean Risk Portfolio Optimization using historical estimates.',
+    label: 'Risk Parity Portfolio Optimization',
   },
   {
     value: '6',
-    label:'Constraints on Return and Risk Measures',
-  }
+    label: 'Constraints on Return and Risk Measures',
+  },
 ];
 
 const assets = [
@@ -162,7 +162,7 @@ const assets = [
 // };
 
 export default function Optimizer() {
-  const [startDate, setStartDate] = useState<Dayjs | null>(dayjs('2022-04-17'));
+  const [startDate, setStartDate] = useState<Dayjs | null>(dayjs('2019-01-01'));
   const [endDate, setEndDate] = useState<Dayjs | null>(dayjs('2022-04-17'));
   const [goal, setGoal] = useState<string>('1');
   const [loading, setLoading] = useState<boolean>(false);
@@ -188,7 +188,7 @@ export default function Optimizer() {
     console.log(assets);
     setLoading(true);
     console.log({
-      goal: 1,
+      goal: goal,
       start: startDate?.format('YYYY-MM-DD'),
       end: endDate?.format('YYYY-MM-DD'),
       assets: ['JCI', 'TGT', 'CMCSA', 'CPB', 'MO'],
@@ -198,7 +198,7 @@ export default function Optimizer() {
       .post(
         `http://localhost:5000/optimizer`,
         {
-          goal: 'Mean Risk Portfolio Optimization using historical estimates',
+          goal: goal.toString(),
           start: startDate?.format('YYYY-MM-DD'),
           end: endDate?.format('YYYY-MM-DD'),
           assets: ['JCI', 'TGT', 'CMCSA', 'CPB', 'MO'],
@@ -213,14 +213,56 @@ export default function Optimizer() {
       .then((res) => {
         console.log(res.data);
         setLoading(false);
-        setPlot1('data:image/png;base64,' + res.data.plot1.toString('base64'));
-        setPlot2('data:image/png;base64,' + res.data.plot2.toString('base64'));
-        setPlot3('data:image/png;base64,' + res.data.plot3.toString('base64'));
-        setPlot4('data:image/png;base64,' + res.data.plot4.toString('base64'));
-        setPlot5('data:image/png;base64,' + res.data.plot5.toString('base64'));
-        setPlot6('data:image/png;base64,' + res.data.plot6.toString('base64'));
-        setPlot7('data:image/png;base64,' + res.data.plot7.toString('base64'));
-        setPlot8('data:image/png;base64,' + res.data.plot8.toString('base64'));
+
+        res.data.plot1 == ''
+          ? setPlot1(null)
+          : setPlot1(
+              'data:image/png;base64,' + res.data.plot1.toString('base64')
+            );
+        res.data.plot2 == ''
+          ? setPlot2(null)
+          : setPlot2(
+              'data:image/png;base64,' + res.data.plot2.toString('base64')
+            );
+        res.data.plot3 == ''
+          ? setPlot3(null)
+          : setPlot3(
+              'data:image/png;base64,' + res.data.plot3.toString('base64')
+            );
+        res.data.plot4 == ''
+          ? setPlot4(null)
+          : setPlot4(
+              'data:image/png;base64,' + res.data.plot4.toString('base64')
+            );
+        res.data.plot5 == ''
+          ? setPlot5(null)
+          : setPlot5(
+              'data:image/png;base64,' + res.data.plot5.toString('base64')
+            );
+        res.data.plot6 == ''
+          ? setPlot6(null)
+          : setPlot6(
+              'data:image/png;base64,' + res.data.plot6.toString('base64')
+            );
+        res.data.plot7 == ''
+          ? setPlot7(null)
+          : setPlot7(
+              'data:image/png;base64,' + res.data.plot7.toString('base64')
+            );
+        res.data.plot8 == ''
+          ? setPlot8(null)
+          : setPlot8(
+              'data:image/png;base64,' + res.data.plot8.toString('base64')
+            );
+
+        // setPlot1('data:image/png;base64,' + res.data.plot1.toString('base64'));
+        // setPlot2('data:image/png;base64,' + res.data.plot2.toString('base64'));
+        // setPlot3('data:image/png;base64,' + res.data.plot3.toString('base64'));
+        // setPlot4('data:image/png;base64,' + res.data.plot4.toString('base64'));
+        // setPlot5('data:image/png;base64,' + res.data.plot5.toString('base64'));
+        // setPlot6('data:image/png;base64,' + res.data.plot6.toString('base64'));
+        // setPlot7('data:image/png;base64,' + res.data.plot7.toString('base64'));
+        // setPlot8('data:image/png;base64,' + res.data.plot8.toString('base64'));
       });
   };
 
@@ -310,9 +352,10 @@ export default function Optimizer() {
               <Typography sx={{ mt: 1 }}>Optimization Goal</Typography>
               <TextField
                 select
-                defaultValue="6"
+                defaultValue={goal}
                 variant="filled"
                 sx={{ width: '100%' }}
+                onChange={(event) => setGoal(event.target.value)}
               >
                 {field.map((option) => (
                   <MenuItem key={option.value} value={option.value}>
@@ -325,7 +368,7 @@ export default function Optimizer() {
               <Typography variant="h6" sx={{ mt: 1 }}>
                 Assets
               </Typography>
-              <Box sx={{ display: 'flex' }}>
+              {/* <Box sx={{ display: 'flex' }}>
                 <Typography sx={{ m: 1 }}>
                   Enter the number of assets you want to optimize:
                 </Typography>
@@ -334,7 +377,7 @@ export default function Optimizer() {
                   onChange={handleChangeCount}
                   variant="outlined"
                 />
-              </Box>
+              </Box> */}
 
               {/* {assets.map((asset, index) => (
                 <Box sx={{ display: 'flex' }} key={index}>
