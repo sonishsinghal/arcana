@@ -21,6 +21,7 @@ Develop a web application that leverages transcripts, financial fundamental data
 1. Host it and send the link or push it to github with setup instructions. 
 2. Judges should be able to set it up <2 min and play with the application.
 
+**Solution :**
 We generated various plots using closing prices and volume.
 The RSI plots were generated for the given closing prices and threshold of 70 and 30 are used.
 50 day and 20 day Moving averages were plotted and in the intersection points buy and sell positions were indicated in the graph.
@@ -41,4 +42,5 @@ The model Could be Classic (historical), BL (Black Litterman) or FM (Factor Mode
 The Objective function, could be MinRisk, MaxRet, Utility or Sharpe.
 The risk aversion factor is not used here since the objective function is not utility.
 
-We made sentiment analysis for the transcripts available and also used LSTM based architecture for forecasting
+We made sentiment analysis for the transcripts available and also used LSTM based architecture for forecasting.
+
