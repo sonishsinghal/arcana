@@ -16,9 +16,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs, { Dayjs } from 'dayjs';
 import { Button } from '@mui/material';
-
-
-
+import { start } from 'repl';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -49,6 +47,7 @@ export default function Optimizer() {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     console.log('submit');
+    console.log(startDate);
   };
 
   return (
@@ -64,57 +63,48 @@ export default function Optimizer() {
           <Appbar />
           <Box
             component="form"
-            // sx={{
-            //   '& .MuiTextField-root': { m: 1 },
-            // }}
+            onSubmit={handleSubmit}
             noValidate
             autoComplete="off"
           >
-            <FormControl
-              onSubmit={(e) => {
-                handleSubmit(e);
-              }}
-              fullWidth
-            >
-              <Box sx={{ m: 1, p: 1 }}>
-                <Typography sx={{ mt: 1 }}>Start Date</Typography>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                    onChange={(newValue) => setStartDate(newValue)}
-                    value={startDate}
-                  />
-                </LocalizationProvider>
-              </Box>
-              <Box sx={{ m: 1, p: 1 }}>
-                <Typography sx={{ mt: 1 }}>End Date </Typography>
-                <LocalizationProvider dateAdapter={AdapterDayjs}>
-                  <DatePicker
-                    onChange={(newValue) => setEndDate(newValue)}
-                    value={endDate}
-                  />
-                </LocalizationProvider>
-              </Box>
-              <Box sx={{ m: 1, p: 1 }}>
-                <Typography sx={{ mt: 1 }}>Optimization Goal</Typography>
-                <TextField
-                  select
-                  defaultValue="1"
-                  variant="filled"
-                  sx={{ width: '100%' }}
-                >
-                  {field.map((option) => (
-                    <MenuItem key={option.value} value={option.value}>
-                      {option.label}
-                    </MenuItem>
-                  ))}
-                </TextField>
-              </Box>
-              <Box sx={{ m: 1, p: 1 }}>
-                <Button type={'submit'} variant="contained">
-                  Submit
-                </Button>
-              </Box>
-            </FormControl>
+            <Box sx={{ m: 1, p: 1 }}>
+              <Typography sx={{ mt: 1 }}>Start Date</Typography>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  onChange={(newValue) => setStartDate(newValue)}
+                  value={startDate}
+                />
+              </LocalizationProvider>
+            </Box>
+            <Box sx={{ m: 1, p: 1 }}>
+              <Typography sx={{ mt: 1 }}>End Date </Typography>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DatePicker
+                  onChange={(newValue) => setEndDate(newValue)}
+                  value={endDate}
+                />
+              </LocalizationProvider>
+            </Box>
+            <Box sx={{ m: 1, p: 1 }}>
+              <Typography sx={{ mt: 1 }}>Optimization Goal</Typography>
+              <TextField
+                select
+                defaultValue="1"
+                variant="filled"
+                sx={{ width: '100%' }}
+              >
+                {field.map((option) => (
+                  <MenuItem key={option.value} value={option.value}>
+                    {option.label}
+                  </MenuItem>
+                ))}
+              </TextField>
+            </Box>
+            <Box sx={{ m: 1, p: 1 }}>
+              <Button type="submit" variant="contained">
+                Submit
+              </Button>
+            </Box>
           </Box>
         </div>
       </main>
