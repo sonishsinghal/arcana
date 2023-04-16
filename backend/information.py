@@ -5,11 +5,13 @@ def information(name):
     tickerSymbol = name
     company = yf.Ticker(tickerSymbol)
     name = company.info['longName']
-    print('Company name:', name)
+    #print('Company name:', name)
     industry = company.info['industry']
-    print('Industry:', industry)
+    #print('Industry:', industry)
     sector = company.info['sector']
-    print('Sector:', sector)
+    #print('Sector:', sector)
     summary = company.info['longBusinessSummary']
-    print('Summary:', summary)
+    #print('Summary:', summary)
+    return name,industry,sector,summary
+
 

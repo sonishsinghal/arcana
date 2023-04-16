@@ -1,5 +1,6 @@
 import Head from 'next/head';
 import * as React from 'react';
+import { useState } from 'react';
 import Image from 'next/image';
 import { Inter } from 'next/font/google';
 import styles from '@/styles/Home.module.css';
@@ -11,6 +12,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import CircularProgress from '@mui/material/CircularProgress';
 
 //Plots
 import Donut from '@/components/Donut';
@@ -18,6 +20,12 @@ import Histogram from '@/components/Histogram';
 
 //axios
 import axios from 'axios';
+
+//date
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import dayjs, { Dayjs } from 'dayjs';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -125,6 +133,10 @@ const assets = [
 ];
 
 export default function Home() {
+  const [startDate, setStartDate] = useState<Dayjs | null>(dayjs('2022-04-17'));
+  const [endDate, setEndDate] = useState<Dayjs | null>(dayjs('2022-04-17'));
+  const [loading, setLoading] = useState<boolean>(false);
+
   //Plots
   const [Plot1, setPlot1] = React.useState<any>(null);
   const [Plot2, setPlot2] = React.useState<any>(null);
@@ -137,21 +149,42 @@ export default function Home() {
   const [Plot9, setPlot9] = React.useState<any>(null);
 
   const [company, setCompany] = React.useState<string>('JCI');
+  const [summary, setSummary] = React.useState<any>(null);
+  const [name, setName] = React.useState<any>(null);
+  const [sector, setSector] = React.useState<any>(null);
+  const [industry, setIndustry] = React.useState<any>(null);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     console.log('submit');
     console.log(company);
 
+    console.log(startDate);
+    console.log(endDate);
+
+    setLoading(true);
+
     axios
-      .post(`http://localhost:5000/image`, company, {
-        headers: {
-          // 'Content-Type': 'multipart/form-data',
-          'Content-Type': 'application/json',
+      .post(
+        `http://localhost:5000/image`,
+        {
+          company: company,
+          start: '2019-01-01',
+          end: '2022-01-01',
         },
-      })
+        {
+          headers: {
+            // 'Content-Type': 'multipart/form-data',
+            'Content-Type': 'application/json',
+          },
+        }
+      )
       .then((res) => {
         console.log(res.data);
+        setSummary(res.data.summary);
+        setName(res.data.name);
+        setSector(res.data.sector);
+        setIndustry(res.data.industry);
         setPlot1('data:image/png;base64,' + res.data.plot1.toString('base64'));
         setPlot2('data:image/png;base64,' + res.data.plot2.toString('base64'));
         setPlot3('data:image/png;base64,' + res.data.plot3.toString('base64'));
@@ -160,7 +193,7 @@ export default function Home() {
         setPlot6('data:image/png;base64,' + res.data.plot6.toString('base64'));
         setPlot7('data:image/png;base64,' + res.data.plot7.toString('base64'));
         setPlot8('data:image/png;base64,' + res.data.plot8.toString('base64'));
-        setPlot9('data:image/png;base64,' + res.data.plot9.toString('base64'));
+        setLoading(false);
       });
   };
 
@@ -180,14 +213,11 @@ export default function Home() {
         <Box>
           <Appbar />
           <Box sx={{ m: 1, p: 1 }}>
-            <Typography variant="h6" sx={{ mt: 1, textAlign: 'center' }}>
-              Company/stock
-            </Typography>
+            <Typography sx={{ mt: 1 }}>Company/stock</Typography>
             <FormControl
               component="form"
               onSubmit={handleSubmit}
-              sx={{ mt: 2 }}
-              variant="standard"
+              // variant="standard"
               fullWidth
             >
               <Select value={company} name="company" onChange={handleChange}>
@@ -197,7 +227,28 @@ export default function Home() {
                   </MenuItem>
                 ))}
               </Select>
-              <Box sx={{ m: 1, p: 1 }}>
+              <Box sx={{ display: 'flex' }}>
+                <Box sx={{ p: 1 }}>
+                  <Typography sx={{ mt: 1 }}>Start Date</Typography>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                      onChange={(newValue) => setStartDate(newValue)}
+                      value={startDate}
+                    />
+                  </LocalizationProvider>
+                </Box>
+                <Box sx={{ p: 1 }}>
+                  <Typography sx={{ mt: 1 }}>End Date </Typography>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DatePicker
+                      onChange={(newValue) => setEndDate(newValue)}
+                      value={endDate}
+                    />
+                  </LocalizationProvider>
+                </Box>
+              </Box>
+
+              <Box sx={{ p: 1 }}>
                 <Button type="submit" variant="contained">
                   Submit
                 </Button>
@@ -215,60 +266,94 @@ export default function Home() {
               <Histogram />
             </Box>
           </Box> */}
-          <Box
-            sx={{
-              display: 'flex',
-              m: 1,
-              flexDirection: 'column',
-              alignItems: 'center',
-            }}
-          >
-            {Plot1 && (
-              <Box sx={{ m: 1 }}>
-                <Image src={Plot1} alt="plot" width={800} height={500} />
+          {loading && (
+            <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+              <CircularProgress />
+            </Box>
+          )}
+          {!loading && (
+            <Box>
+              <Box>
+                <Typography
+                  variant="h4"
+                  sx={{ m: 1, p: 1, textAlign: 'center' }}
+                >
+                  {name && name}
+                </Typography>
               </Box>
-            )}
-            {Plot2 && (
-              <Box sx={{ m: 1 }}>
-                <Image src={Plot2} alt="plot" width={800} height={500} />
+              <Box>
+                <Typography
+                  variant="h4"
+                  sx={{ m: 1, p: 1, textAlign: 'center' }}
+                >
+                  {industry && industry}
+                </Typography>
               </Box>
-            )}
-            {Plot3 && (
-              <Box sx={{ m: 1 }}>
-                <Image src={Plot3} alt="plot" width={800} height={500} />
+              <Box>
+                <Typography
+                  variant="h4"
+                  sx={{ m: 1, p: 1, textAlign: 'center' }}
+                >
+                  {sector && sector}
+                </Typography>
               </Box>
-            )}
-            {Plot4 && (
-              <Box sx={{ m: 1 }}>
-                <Image src={Plot4} alt="plot" width={800} height={500} />
+              <Box>
+                <Typography sx={{ m: 1, p: 1, textAlign: 'center' }}>
+                  {summary && summary}
+                </Typography>
               </Box>
-            )}
-            {Plot5 && (
-              <Box sx={{ m: 1 }}>
-                <Image src={Plot5} alt="plot" width={800} height={500} />
+
+              <Box
+                sx={{
+                  display: 'flex',
+                  m: 1,
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                }}
+              >
+                {Plot1 && (
+                  <Box sx={{ m: 1 }}>
+                    <Image src={Plot1} alt="plot" width={800} height={500} />
+                  </Box>
+                )}
+                {Plot2 && (
+                  <Box sx={{ m: 1 }}>
+                    <Image src={Plot2} alt="plot" width={800} height={500} />
+                  </Box>
+                )}
+                {Plot3 && (
+                  <Box sx={{ m: 1 }}>
+                    <Image src={Plot3} alt="plot" width={800} height={500} />
+                  </Box>
+                )}
+                {Plot4 && (
+                  <Box sx={{ m: 1 }}>
+                    <Image src={Plot4} alt="plot" width={800} height={500} />
+                  </Box>
+                )}
+                {Plot5 && (
+                  <Box sx={{ m: 1 }}>
+                    <Image src={Plot5} alt="plot" width={800} height={500} />
+                  </Box>
+                )}
+                {Plot6 && (
+                  <Box sx={{ m: 1 }}>
+                    <Image src={Plot6} alt="plot" width={800} height={500} />
+                  </Box>
+                )}
+                {Plot7 && (
+                  <Box sx={{ m: 1 }}>
+                    <Image src={Plot7} alt="plot" width={800} height={500} />
+                  </Box>
+                )}
+                {Plot8 && (
+                  <Box sx={{ m: 1 }}>
+                    <Image src={Plot8} alt="plot" width={800} height={500} />
+                  </Box>
+                )}
               </Box>
-            )}
-            {Plot6 && (
-              <Box sx={{ m: 1 }}>
-                <Image src={Plot6} alt="plot" width={800} height={500} />
-              </Box>
-            )}
-            {Plot7 && (
-              <Box sx={{ m: 1 }}>
-                <Image src={Plot7} alt="plot" width={800} height={500} />
-              </Box>
-            )}
-            {Plot8 && (
-              <Box sx={{ m: 1 }}>
-                <Image src={Plot8} alt="plot" width={800} height={500} />
-              </Box>
-            )}
-            {Plot9 && (
-              <Box sx={{ m: 1 }}>
-                <Image src={Plot9} alt="plot" width={800} height={500} />
-              </Box>
-            )}
-          </Box>
+            </Box>
+          )}
         </Box>
       </main>
     </>

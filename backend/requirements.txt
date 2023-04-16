@@ -5,3 +5,6 @@ cvxpy
 riskfolio-lib
 yfinance 
 mosek 
+keras
+scikit-learn
+tensorflow

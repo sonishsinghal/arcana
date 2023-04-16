@@ -18,6 +18,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
+import Link from '@mui/material/Link';
 
 const drawerWidth = 240;
 
@@ -125,12 +126,20 @@ export default function PersistentDrawerLeft() {
         </DrawerHeader>
         <Divider />
         <List>
-          <ListItem disablePadding>
-            <ListItemButton>
-              {/* <ListItemIcon></ListItemIcon> */}
-              <ListItemText>Portfolio Managment</ListItemText>
-            </ListItemButton>
-          </ListItem>
+          <Link href="/" underline="none">
+            <ListItem disablePadding>
+              <ListItemButton>
+                <ListItemText>Home</ListItemText>
+              </ListItemButton>
+            </ListItem>
+          </Link>
+          <Link href="/optimizer" underline="none">
+            <ListItem disablePadding>
+              <ListItemButton>
+                <ListItemText>Portfolio Optimizer</ListItemText>
+              </ListItemButton>
+            </ListItem>
+          </Link>
         </List>
       </Drawer>
       <Main open={open}>

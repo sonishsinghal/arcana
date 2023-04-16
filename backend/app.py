@@ -4,7 +4,7 @@ import base64
 import json
 import os
 from onestock import plot_generator
-
+from information import information
 app = Flask(__name__)
 CORS(app)
 
@@ -20,20 +20,42 @@ def hello_world():
 def getImage():
     data = json.loads(request.data)
     print(data["company"])
-    plot_generator(data["start"],data["end"],data["company"])
-    with open("./images/image.png", "rb") as img_file:
-        b64_string = base64.b64encode(img_file.read())
-    data = jsonify(plot1=str(b64_string, 'UTF-8'),
-                   plot2=str(b64_string, 'UTF-8'),
-                   plot3=str(b64_string, 'UTF-8'),
-                   plot4=str(b64_string, 'UTF-8'),
+    print(data["start"])
+    print(data["end"])
+    plot_generator(data["start"], data["end"], data["company"])
+    with open("./images/Open_Price.jpg", "rb") as img_file:
+        b64_string1 = base64.b64encode(img_file.read())
+    with open("./images/Close_Price.jpg", "rb") as img_file:
+        b64_string2 = base64.b64encode(img_file.read())
+    with open("./images/High_Price.jpg", "rb") as img_file:
+        b64_string3 = base64.b64encode(img_file.read())
+    with open("./images/Low_Price.jpg", "rb") as img_file:
+        b64_string4 = base64.b64encode(img_file.read())
+    with open("./images/Relative_Strength_Index.jpg", "rb") as img_file:
+        b64_string5 = base64.b64encode(img_file.read())
+    with open("./images/Moving_avg.jpg", "rb") as img_file:
+        b64_string6 = base64.b64encode(img_file.read())
+    with open("./images/Bollinger_Bands.jpg", "rb") as img_file:
+        b64_string7 = base64.b64encode(img_file.read())
+    with open("./images/LSTM.jpg", "rb") as img_file:
+        b64_string8 = base64.b64encode(img_file.read())
 
-                   plot5=str(b64_string, 'UTF-8'),
-                   plot6=str(b64_string, 'UTF-8'),
-                   plot7=str(b64_string, 'UTF-8'),
-                   plot8=str(b64_string, 'UTF-8'),
-                   plot9=str(b64_string, 'UTF-8'),
-                   )
+    name, industry, sector, summary = information(data["company"])
+    data = jsonify(
+        name=name,
+        industry=industry,
+        sector=sector,
+        summary=summary,
+        plot1=str(b64_string1, 'UTF-8'),
+        plot2=str(b64_string2, 'UTF-8'),
+        plot3=str(b64_string3, 'UTF-8'),
+        plot4=str(b64_string4, 'UTF-8'),
+
+        plot5=str(b64_string5, 'UTF-8'),
+        plot6=str(b64_string6, 'UTF-8'),
+        plot7=str(b64_string7, 'UTF-8'),
+        plot8=str(b64_string8, 'UTF-8'),
+    )
     return data
 
 
