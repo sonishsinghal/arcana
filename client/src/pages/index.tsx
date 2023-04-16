@@ -1,16 +1,23 @@
 import Head from 'next/head';
+import * as React from 'react';
 import Image from 'next/image';
 import { Inter } from 'next/font/google';
 import styles from '@/styles/Home.module.css';
 import Appbar from '@/components/Appbar';
 import { Box } from '@mui/material';
-import * as React from 'react';
 import { Typography } from '@mui/material';
+import { Button } from '@mui/material';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+
+//Plots
 import Donut from '@/components/Donut';
+import Histogram from '@/components/Histogram';
+
+//axios
+import axios from 'axios';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -118,11 +125,49 @@ const assets = [
 ];
 
 export default function Home() {
-  const [company, setCompany] = React.useState<string>('Apple');
+  //Plots
+  const [Plot1, setPlot1] = React.useState<any>(null);
+  const [Plot2, setPlot2] = React.useState<any>(null);
+  const [Plot3, setPlot3] = React.useState<any>(null);
+  const [Plot4, setPlot4] = React.useState<any>(null);
+  const [Plot5, setPlot5] = React.useState<any>(null);
+  const [Plot6, setPlot6] = React.useState<any>(null);
+  const [Plot7, setPlot7] = React.useState<any>(null);
+  const [Plot8, setPlot8] = React.useState<any>(null);
+  const [Plot9, setPlot9] = React.useState<any>(null);
+
+  const [company, setCompany] = React.useState<string>('JCI');
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    console.log('submit');
+    console.log(company);
+
+    axios
+      .post(`http://localhost:5000/image`, company, {
+        headers: {
+          // 'Content-Type': 'multipart/form-data',
+          'Content-Type': 'application/json',
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+        setPlot1('data:image/png;base64,' + res.data.plot1.toString('base64'));
+        setPlot2('data:image/png;base64,' + res.data.plot2.toString('base64'));
+        setPlot3('data:image/png;base64,' + res.data.plot3.toString('base64'));
+        setPlot4('data:image/png;base64,' + res.data.plot4.toString('base64'));
+        setPlot5('data:image/png;base64,' + res.data.plot5.toString('base64'));
+        setPlot6('data:image/png;base64,' + res.data.plot6.toString('base64'));
+        setPlot7('data:image/png;base64,' + res.data.plot7.toString('base64'));
+        setPlot8('data:image/png;base64,' + res.data.plot8.toString('base64'));
+        setPlot9('data:image/png;base64,' + res.data.plot9.toString('base64'));
+      });
+  };
 
   const handleChange = (event: SelectChangeEvent) => {
     setCompany(event.target.value as string);
   };
+
   return (
     <>
       <Head>
@@ -132,31 +177,99 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <div>
+        <Box>
           <Appbar />
           <Box sx={{ m: 1, p: 1 }}>
             <Typography variant="h6" sx={{ mt: 1, textAlign: 'center' }}>
               Company/stock
             </Typography>
-            <FormControl sx={{ mt: 2 }} variant="standard" fullWidth>
-              <Select value={'CNP'} name="company" onChange={handleChange}>
+            <FormControl
+              component="form"
+              onSubmit={handleSubmit}
+              sx={{ mt: 2 }}
+              variant="standard"
+              fullWidth
+            >
+              <Select value={company} name="company" onChange={handleChange}>
                 {assets.map((option) => (
                   <MenuItem key={option.value} value={option.value}>
                     {option.label}
                   </MenuItem>
                 ))}
               </Select>
+              <Box sx={{ m: 1, p: 1 }}>
+                <Button type="submit" variant="contained">
+                  Submit
+                </Button>
+              </Box>
             </FormControl>
           </Box>
-          <Box sx={{ display: 'flex', m: 1 }}>
+          {/* <Box sx={{ display: 'flex', m: 1 }}>
             <Box sx={{ m: 1 }}>
               <Donut />
             </Box>
             <Box sx={{ m: 1 }}>
               <Donut />
             </Box>
+            <Box>
+              <Histogram />
+            </Box>
+          </Box> */}
+          <Box
+            sx={{
+              display: 'flex',
+              m: 1,
+              flexDirection: 'column',
+              alignItems: 'center',
+            }}
+          >
+            {Plot1 && (
+              <Box sx={{ m: 1 }}>
+                <Image src={Plot1} alt="plot" width={800} height={500} />
+              </Box>
+            )}
+            {Plot2 && (
+              <Box sx={{ m: 1 }}>
+                <Image src={Plot2} alt="plot" width={800} height={500} />
+              </Box>
+            )}
+            {Plot3 && (
+              <Box sx={{ m: 1 }}>
+                <Image src={Plot3} alt="plot" width={800} height={500} />
+              </Box>
+            )}
+            {Plot4 && (
+              <Box sx={{ m: 1 }}>
+                <Image src={Plot4} alt="plot" width={800} height={500} />
+              </Box>
+            )}
+            {Plot5 && (
+              <Box sx={{ m: 1 }}>
+                <Image src={Plot5} alt="plot" width={800} height={500} />
+              </Box>
+            )}
+            {Plot6 && (
+              <Box sx={{ m: 1 }}>
+                <Image src={Plot6} alt="plot" width={800} height={500} />
+              </Box>
+            )}
+            {Plot7 && (
+              <Box sx={{ m: 1 }}>
+                <Image src={Plot7} alt="plot" width={800} height={500} />
+              </Box>
+            )}
+            {Plot8 && (
+              <Box sx={{ m: 1 }}>
+                <Image src={Plot8} alt="plot" width={800} height={500} />
+              </Box>
+            )}
+            {Plot9 && (
+              <Box sx={{ m: 1 }}>
+                <Image src={Plot9} alt="plot" width={800} height={500} />
+              </Box>
+            )}
           </Box>
-        </div>
+        </Box>
       </main>
     </>
   );
