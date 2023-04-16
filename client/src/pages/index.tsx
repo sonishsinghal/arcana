@@ -133,8 +133,8 @@ const assets = [
 ];
 
 export default function Home() {
-  const [startDate, setStartDate] = useState<Dayjs | null>(dayjs('2022-04-17'));
-  const [endDate, setEndDate] = useState<Dayjs | null>(dayjs('2022-04-17'));
+  const [startDate, setStartDate] = useState<Dayjs | null>(dayjs('2019-01-01'));
+  const [endDate, setEndDate] = useState<Dayjs | null>(dayjs('2022-12-31'));
   const [loading, setLoading] = useState<boolean>(false);
 
   //Plots
@@ -159,8 +159,13 @@ export default function Home() {
     console.log('submit');
     console.log(company);
 
-    console.log(startDate);
+    console.log(startDate?.format('YYYY-MM-DD'));
     console.log(endDate);
+
+    if (startDate && endDate && startDate > endDate) {
+      alert('Start date cannot be greater than end date');
+      return;
+    }
 
     setLoading(true);
 
@@ -169,8 +174,8 @@ export default function Home() {
         `http://localhost:5000/image`,
         {
           company: company,
-          start: '2019-01-01',
-          end: '2022-01-01',
+          start: startDate?.format('YYYY-MM-DD'),
+          end: endDate?.format('YYYY-MM-DD'),
         },
         {
           headers: {
@@ -273,36 +278,6 @@ export default function Home() {
           )}
           {!loading && (
             <Box>
-              <Box>
-                <Typography
-                  variant="h4"
-                  sx={{ m: 1, p: 1, textAlign: 'center' }}
-                >
-                  {name && name}
-                </Typography>
-              </Box>
-              <Box>
-                <Typography
-                  variant="h4"
-                  sx={{ m: 1, p: 1, textAlign: 'center' }}
-                >
-                  {industry && industry}
-                </Typography>
-              </Box>
-              <Box>
-                <Typography
-                  variant="h4"
-                  sx={{ m: 1, p: 1, textAlign: 'center' }}
-                >
-                  {sector && sector}
-                </Typography>
-              </Box>
-              <Box>
-                <Typography sx={{ m: 1, p: 1, textAlign: 'center' }}>
-                  {summary && summary}
-                </Typography>
-              </Box>
-
               <Box
                 sx={{
                   display: 'flex',
@@ -319,65 +294,38 @@ export default function Home() {
                 {Plot2 && (
                   <Box sx={{ mt: 1 }}>
                     <Image src={Plot2} alt="plot" width={800} height={500} />
-                    <Typography sx={{ textAlign: 'center' }}>
-                      The plots are the fluctuation in Open, close, high and low
-                      prices.
-                    </Typography>
                   </Box>
                 )}
 
                 {Plot5 && (
                   <Box sx={{ mt: 1 }}>
                     <Image src={Plot5} alt="plot" width={800} height={500} />
-                    <Typography sx={{ textAlign: 'center' }}>
-                      The RSI plots were generated for the given closing prices
-                      and threshold of 70 and 30 are used.
-                    </Typography>
                   </Box>
                 )}
                 {Plot6 && (
                   <Box sx={{ mt: 1 }}>
                     <Image src={Plot6} alt="plot" width={800} height={500} />
-                    <Typography sx={{ textAlign: 'center' }}>
-                      {' '}
-                      50 day and 20 day Moving averages were plotted and in the
-                      intersection points buy and sell positions were indicated
-                      in the graph.
-                    </Typography>
                   </Box>
                 )}
                 {Plot7 && (
                   <Box sx={{ mt: 1 }}>
                     <Image src={Plot7} alt="plot" width={800} height={500} />
-                    <Typography sx={{ textAlign: 'center' }}>
-                      Additionally, Boullinger bands were plotted for bounding
-                      the price flow.
-                    </Typography>
                   </Box>
                 )}
                 {Plot8 && (
                   <Box sx={{ mt: 1 }}>
                     <Image src={Plot8} alt="plot" width={800} height={500} />
-                    <Typography sx={{ textAlign: 'center' }}>
-                      AI models were tried and trained on the previous 32 days
-                      of the data and tried to fit on the data.
-                    </Typography>
                   </Box>
                 )}
 
                 {Plot3 && (
                   <Box sx={{ mt: 1 }}>
                     <Image src={Plot3} alt="plot" width={800} height={500} />
-                    <Typography sx={{ textAlign: 'center' }}></Typography>
                   </Box>
                 )}
                 {Plot4 && (
                   <Box sx={{ m: 1 }}>
                     <Image src={Plot4} alt="plot" width={800} height={500} />
-                    <Typography sx={{ textAlign: 'center' }}>
-                      The above-generated plots indicate the variation in price
-                      over a given time.{' '}
-                    </Typography>
                   </Box>
                 )}
               </Box>
