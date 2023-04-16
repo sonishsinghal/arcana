@@ -1,5 +1,9 @@
 # Arcana
 
+### Deployment url
+
+https://arcana.herokuapp.com
+
 ### Local installation
 
 Clone the repository
